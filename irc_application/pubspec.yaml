@@ -37,6 +37,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   page_transition: ^2.0.9
   font_awesome_flutter: ^10.4.0
+  dotted_line: ^3.2.2
+  csv: ^5.0.2
+  file_picker: ^5.3.2
 
 dev_dependencies:
   flutter_test:
