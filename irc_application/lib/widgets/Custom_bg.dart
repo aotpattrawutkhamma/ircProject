@@ -30,7 +30,7 @@ class CustomBg extends StatelessWidget {
           ? null
           : AppBar(
               elevation: 0,
-              backgroundColor: COLOR_TRANPARENT,
+              backgroundColor: Colors.grey,
               centerTitle: true,
               title: isHideTitle ? null : textTitle,
               automaticallyImplyLeading: false,
