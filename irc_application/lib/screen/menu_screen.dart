@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:irc_application/config/app_constants.dart';
 import 'package:irc_application/route/route_generator.dart';
+import 'package:irc_application/services/sqlite.dart';
 import 'package:irc_application/widgets/Custom_bg.dart';
 import 'package:irc_application/widgets/Label.dart';
 
@@ -13,6 +14,19 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+  DatabaseHelper databaseHelper = DatabaseHelper();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _createDatabase();
+  }
+
+  void _createDatabase() async {
+    await databaseHelper.initializeDatabase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomBg(
@@ -55,12 +69,17 @@ class _MenuScreenState extends State<MenuScreen> {
                         child: Column(
                           children: [
                             Expanded(
-                                child: Image(
-                              image: AssetImage('assets/icons/scanp.png'),
-                              width: 150,
+                                child: Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Image(
+                                image: AssetImage('assets/icons/scanp.png'),
+                                width: 150,
+                              ),
                             )),
                             Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: EdgeInsets.only(
+                                bottom: 5,
+                              ),
                               child: Label("Scan"),
                             )
                           ],

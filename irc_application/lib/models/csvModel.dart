@@ -1,15 +1,15 @@
 class CsvModel {
-  const CsvModel({this.MESSAGE, this.RESULT});
+  const CsvModel({this.LOCATION, this.DATA});
 
-  final bool? RESULT;
-  final String? MESSAGE;
+  final String? LOCATION;
+  final String? DATA;
 
-  List<Object> get props => [RESULT!, MESSAGE!];
+  List<Object> get props => [LOCATION!, DATA!];
 
   static CsvModel fromJson(dynamic json) {
     return CsvModel(
-      RESULT: json['Location'],
-      MESSAGE: json['DATA'],
+      LOCATION: json['Location'],
+      DATA: json['DATA'],
     );
   }
 }
