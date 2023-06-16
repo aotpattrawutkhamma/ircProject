@@ -49,7 +49,8 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => print("object"),
+                      onTap: () =>
+                          Navigator.pushNamed(context, RouterList.SCAN_SCREEN),
                       child: const Card(
                         child: Column(
                           children: [
