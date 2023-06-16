@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:irc_application/widgets/Custom_bg.dart';
+import 'package:irc_application/widgets/Label.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -10,10 +12,6 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [],
-      ),
-    );
+    return CustomBg(textTitle: Label("Menu"), body: Column());
   }
 }
