@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:irc_application/config/app_constants.dart';
 import 'package:irc_application/route/route_generator.dart';
 import 'package:irc_application/widgets/Custom_bg.dart';
@@ -34,8 +35,15 @@ class _MenuScreenState extends State<MenuScreen> {
                       child: const Card(
                         child: Column(
                           children: [
-                            Expanded(child: Icon(Icons.import_export)),
-                            Label("Import")
+                            Expanded(
+                                child: Image(
+                              image: AssetImage('assets/icons/csv2.png'),
+                              width: 150,
+                            )),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 5),
+                              child: Label("Import"),
+                            )
                           ],
                         ),
                       ),
@@ -45,7 +53,11 @@ class _MenuScreenState extends State<MenuScreen> {
                       child: const Card(
                         child: Column(
                           children: [
-                            Expanded(child: Icon(Icons.scanner)),
+                            Expanded(
+                                child: Image(
+                              image: AssetImage('assets/icons/scanp.png'),
+                              width: 150,
+                            )),
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Label("Scan"),
@@ -59,7 +71,11 @@ class _MenuScreenState extends State<MenuScreen> {
                       child: const Card(
                         child: Column(
                           children: [
-                            Expanded(child: Icon(Icons.import_export)),
+                            Expanded(
+                                child: Image(
+                              image: AssetImage('assets/icons/scanp.png'),
+                              width: 150,
+                            )),
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Label("Export"),
