@@ -115,6 +115,7 @@ class _ScanScreenState extends State<ScanScreen> {
         textTitle: Label(
           "Scan",
           fontSize: 24,
+          color: COLOR_WHITE,
         ),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -124,17 +125,25 @@ class _ScanScreenState extends State<ScanScreen> {
                 CustomInputField(
                   focusNode: _f1,
                   controller: _userController,
-                  labeltext: Label("User :"),
+                  labeltext: Label(
+                    "User : ",
+                    color: COLOR_WHITE,
+                  ),
                   onEditingComplete: () {
                     _f2.requestFocus();
                   },
+                  fillColor: COLOR_WHITE,
                 ),
                 SizedBox(
                   height: 15,
                 ),
                 Row(
                   children: [
-                    Expanded(child: Label("Location")),
+                    Expanded(
+                        child: Label(
+                      "Location:",
+                      color: COLOR_WHITE,
+                    )),
                     Expanded(flex: 4, child: _dropdownButton())
                   ],
                 ),
@@ -142,55 +151,83 @@ class _ScanScreenState extends State<ScanScreen> {
                   height: 15,
                 ),
                 CustomInputField(
+                  height: 70,
                   focusNode: _f3,
                   controller: _barcodeController,
-                  labeltext: Label("Barcode"),
+                  maxLines: 2,
+                  labeltext: Padding(
+                    padding: const EdgeInsets.only(bottom: 25),
+                    child: Label(
+                      "Barcode : ",
+                      color: COLOR_WHITE,
+                    ),
+                  ),
                   onEditingComplete: () {
                     _checkDataWithLocation();
                   },
+                  fillColor: COLOR_WHITE,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomInputField(
+                        controller: _b1Controller,
+                        labeltext: Label(
+                          "B1 : ",
+                          color: COLOR_WHITE,
+                        ),
+                        enabled: false,
+                        fillColor: COLOR_WHITE.withOpacity(0.8),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                      child: CustomInputField(
+                        controller: _b2Controller,
+                        labeltext: Label(
+                          "B2 : ",
+                          color: COLOR_WHITE,
+                        ),
+                        enabled: false,
+                        fillColor: COLOR_WHITE.withOpacity(0.8),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                CustomInputField(
-                  controller: _b1Controller,
-                  labeltext: Label("B1"),
-                  enabled: false,
-                  fillColor: Colors.grey.withOpacity(0.4),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomInputField(
+                        controller: _b3Controller,
+                        labeltext: Label(
+                          "B3 : ",
+                          color: COLOR_WHITE,
+                        ),
+                        enabled: false,
+                        fillColor: COLOR_WHITE.withOpacity(0.8),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                      child: CustomInputField(
+                        controller: _b4Controller,
+                        labeltext: Label(
+                          "B4 : ",
+                          color: COLOR_WHITE,
+                        ),
+                        enabled: false,
+                        fillColor: COLOR_WHITE.withOpacity(0.8),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                CustomInputField(
-                  controller: _b2Controller,
-                  labeltext: Label("B2"),
-                  enabled: false,
-                  fillColor: Colors.grey.withOpacity(0.4),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                CustomInputField(
-                  controller: _b3Controller,
-                  labeltext: Label("B3"),
-                  enabled: false,
-                  fillColor: Colors.grey.withOpacity(0.4),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                CustomInputField(
-                  controller: _b4Controller,
-                  labeltext: Label("B4"),
-                  enabled: false,
-                  fillColor: Colors.grey.withOpacity(0.4),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                CustomButton(
-                  text: Label("Save"),
-                )
               ],
             ),
           ),
@@ -201,6 +238,8 @@ class _ScanScreenState extends State<ScanScreen> {
     return DropdownButtonFormField2<String>(
       focusNode: _f2,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: COLOR_WHITE,
         contentPadding: EdgeInsets.zero,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(0),

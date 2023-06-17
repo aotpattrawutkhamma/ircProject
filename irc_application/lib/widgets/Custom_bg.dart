@@ -25,19 +25,19 @@ class CustomBg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: COLOR_DIM_GRAY,
       appBar: isHideAppBar
           ? null
           : AppBar(
               elevation: 0,
-              backgroundColor: Colors.grey,
+              backgroundColor: COLOR_DARK_BLUE,
               centerTitle: true,
               title: isHideTitle ? null : textTitle,
               automaticallyImplyLeading: false,
               leading: isHidePreviour
                   ? null
                   : BackButton(
-                      color: COLOR_BLACK,
+                      color: COLOR_WHITE,
                       onPressed: () =>
                           onPressedBack?.call() ?? Navigator.pop(context),
                     ),
