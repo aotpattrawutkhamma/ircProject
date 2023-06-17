@@ -6,17 +6,24 @@ class Label extends StatelessWidget {
       {super.key,
       this.color = COLOR_BLACK,
       this.fontSize = 16,
-      this.fontWeight});
+      this.fontWeight,
+      this.maxLines});
   final String text;
   final Color color;
   final double fontSize;
+  final int? maxLines;
   final FontWeight? fontWeight;
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style:
-          TextStyle(color: color, fontSize: fontSize, fontWeight: fontWeight),
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        color: color,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+      ),
     );
   }
 }

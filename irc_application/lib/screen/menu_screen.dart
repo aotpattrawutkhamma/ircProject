@@ -31,7 +31,11 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return CustomBg(
         isHidePreviour: true,
-        textTitle: Label("Menu"),
+        textTitle: Label(
+          "Count Stock IRC",
+          color: COLOR_WHITE,
+          fontSize: 22,
+        ),
         body: Column(
           children: [
             Expanded(
@@ -47,17 +51,16 @@ class _MenuScreenState extends State<MenuScreen> {
                       onTap: () => Navigator.pushNamed(
                           context, RouterList.IMPORT_SCREEN),
                       child: const Card(
+                        color: COLOR_GRAY_BLUE,
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                                child: Image(
+                            Image(
                               image: AssetImage('assets/icons/csv2.png'),
-                              width: 150,
-                            )),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 5),
-                              child: Label("Import"),
-                            )
+                              color: COLOR_WHITE,
+                              width: 125,
+                            ),
+                            Label("Import")
                           ],
                         ),
                       ),
@@ -66,22 +69,19 @@ class _MenuScreenState extends State<MenuScreen> {
                       onTap: () =>
                           Navigator.pushNamed(context, RouterList.SCAN_SCREEN),
                       child: const Card(
+                        color: COLOR_GRAY_BLUE,
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                                child: Padding(
+                            Padding(
                               padding: EdgeInsets.only(top: 10),
                               child: Image(
                                 image: AssetImage('assets/icons/scanp.png'),
-                                width: 150,
+                                color: COLOR_WHITE,
+                                width: 120,
                               ),
-                            )),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                bottom: 5,
-                              ),
-                              child: Label("Scan"),
-                            )
+                            ),
+                            Label("Scan")
                           ],
                         ),
                       ),
@@ -89,12 +89,18 @@ class _MenuScreenState extends State<MenuScreen> {
                     GestureDetector(
                       onTap: () => print("object"),
                       child: const Card(
+                        color: COLOR_GRAY_BLUE,
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
-                                child: Image(
-                              image: AssetImage('assets/icons/scanp.png'),
-                              width: 150,
+                                child: Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Image(
+                                image: AssetImage('assets/icons/scanp.png'),
+                                color: COLOR_WHITE,
+                                width: 150,
+                              ),
                             )),
                             Padding(
                               padding: EdgeInsets.all(8.0),
@@ -106,12 +112,6 @@ class _MenuScreenState extends State<MenuScreen> {
                     ),
                   ]),
             ),
-            Expanded(
-              child: Label(
-                "Please enter  number 1 - 3 to select the menu",
-                color: COLOR_DANGER,
-              ),
-            )
           ],
         ));
   }

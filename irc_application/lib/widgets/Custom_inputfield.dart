@@ -9,28 +9,33 @@ class CustomInputField extends StatelessWidget {
       this.controller,
       this.fillColor = COLOR_TRANPARENT,
       this.onEditingComplete,
-      this.focusNode});
+      this.focusNode,
+      this.height,
+      this.maxLines});
   final Widget? labeltext;
   final bool? enabled;
   final TextEditingController? controller;
   final Color fillColor;
   final Function? onEditingComplete;
   final FocusNode? focusNode;
+  final double? height;
+  final int? maxLines;
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: labeltext ?? Container()),
+        labeltext ?? Container(),
         Expanded(
           flex: 4,
-          child: SizedBox(
-            height: 40,
+          child: Container(
+            height: height ?? 40,
             child: TextFormField(
+              maxLines: 1,
               focusNode: focusNode,
               onEditingComplete: () => onEditingComplete?.call(),
               controller: controller,
               enabled: enabled,
-              textAlignVertical: TextAlignVertical.top,
+              textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(horizontal: 12),
                   filled: true,
