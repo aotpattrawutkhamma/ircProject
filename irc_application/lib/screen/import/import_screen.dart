@@ -22,7 +22,7 @@ class ImportScreen extends StatefulWidget {
 
 class _ImportScreenState extends State<ImportScreen> {
   List<CsvModel> csvModelData = [];
-  List<CsvModel> _tempCsv = [];
+
   List<FileCsvModel> result = [];
   DatabaseHelper databaseHelper = DatabaseHelper();
 
@@ -57,23 +57,20 @@ class _ImportScreenState extends State<ImportScreen> {
     if (csvModelData.isNotEmpty) {
       var sql = await databaseHelper.queryData('FileCsv');
       if (sql.isEmpty) {
-        print("isEmptry");
         csvModelData.forEach((element) async {
           await databaseHelper.insertSqlite(
               'FileCsv', {'LOCATION': element.LOCATION, 'DATA': element.DATA});
         });
+        csvModelData.clear();
         await _getData();
       } else if (sql.isNotEmpty) {
-        _errorDialog(
-            text: Label("Do you want to save again ?"),
-            onpressOk: () async {
-              await databaseHelper.deleted('FileCsv');
-              csvModelData.forEach((element) async {
-                await databaseHelper.insertSqlite('FileCsv',
-                    {'LOCATION': element.LOCATION, 'DATA': element.DATA});
-              });
-              Navigator.pop(context);
-            });
+        await databaseHelper.deleted('FileCsv');
+        csvModelData.forEach((element) async {
+          await databaseHelper.insertSqlite(
+              'FileCsv', {'LOCATION': element.LOCATION, 'DATA': element.DATA});
+        });
+        csvModelData.clear();
+        await _getData();
       }
     }
   }
@@ -92,9 +89,7 @@ class _ImportScreenState extends State<ImportScreen> {
       setState(() {
         result = sqlData.map((e) => FileCsvModel.fromMap(e)).toList();
       });
-    } else {
-      print("Nodata");
-    }
+    } else {}
   }
 
   Future _deleted() async {
@@ -105,7 +100,6 @@ class _ImportScreenState extends State<ImportScreen> {
         result.clear();
         csvModelData.clear();
       });
-      print("Test ${result.length}");
     } else if (csvModelData.isNotEmpty) {
       setState(() {
         csvModelData.clear();
@@ -156,7 +150,7 @@ class _ImportScreenState extends State<ImportScreen> {
                       if (csvModelData.isNotEmpty) {
                         _errorDialog(
                             text: Label(
-                                "Do you want to save  ? \nRecord : ${csvModelData.length}"),
+                                "Do you want to save  ? \nRecord : ${csvModelData.skip(1).length}"),
                             onpressOk: () async {
                               _saveData();
                               Navigator.pop(context);
@@ -211,11 +205,17 @@ class _ImportScreenState extends State<ImportScreen> {
               const SizedBox(
                 height: 10,
               ),
-              Label(
-                "Record: ${csvModelData.length} row",
-                color: COLOR_WHITE,
-                fontSize: 20,
-              ),
+              csvModelData.isNotEmpty
+                  ? Label(
+                      "Record: ${(csvModelData.skip(1).length)} row",
+                      color: COLOR_WHITE,
+                      fontSize: 20,
+                    )
+                  : Label(
+                      "Record: ${(result.skip(1).length)} row",
+                      color: COLOR_WHITE,
+                      fontSize: 20,
+                    ),
               const SizedBox(
                 height: 10,
               ),
@@ -279,11 +279,12 @@ class _ImportScreenState extends State<ImportScreen> {
                                 ]);
                               }).toList()
                             : result.isNotEmpty
-                                ? result.skip(1).map((e) {
+                                ? result.skip(1).map((data) {
                                     return DataRow(cells: [
-                                      DataCell(Text(e.LOCATION ?? '')),
-                                      DataCell(Text(
-                                        e.DATA ?? '',
+                                      DataCell(Label(data.LOCATION ?? '')),
+                                      DataCell(Label(
+                                        data.DATA ?? '',
+                                        fontSize: 15,
                                       )),
                                     ]);
                                   }).toList()
