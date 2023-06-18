@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:irc_application/screen/export/export_screen.dart';
 import 'package:irc_application/screen/import/import_screen.dart';
 import 'package:irc_application/screen/scan/scan_screen.dart';
 import 'package:page_transition/page_transition.dart';
@@ -17,6 +18,11 @@ class RouteGenerator {
             settings: settings,
             child: ScanScreen(),
             type: PageTransitionType.fade);
+      case RouterList.EXPORT_SCREEN:
+        return PageTransition(
+            settings: settings,
+            child: ExportScreen(),
+            type: PageTransitionType.fade);
     }
     throw UnsupportedError('Unknow route : ${settings.name}');
   }
@@ -25,4 +31,5 @@ class RouteGenerator {
 class RouterList {
   static const String IMPORT_SCREEN = '/Import';
   static const String SCAN_SCREEN = '/Scan';
+  static const String EXPORT_SCREEN = '/export';
 }

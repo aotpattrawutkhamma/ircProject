@@ -1,5 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
 import 'package:irc_application/config/app_constants.dart';
 import 'package:irc_application/widgets/Custom_bg.dart';
 import 'package:irc_application/widgets/Custom_button.dart';
@@ -79,6 +81,19 @@ class _ScanScreenState extends State<ScanScreen> {
             _b4Controller.clear();
           }
         });
+        _errorDialog(
+            text: Label("Do you want to Save ?"),
+            onpressOk: () async {
+              await _saveData();
+              Navigator.pop(context);
+              _b1Controller.clear();
+              _b2Controller.clear();
+              _b3Controller.clear();
+              _b4Controller.clear();
+              EasyLoading.showSuccess("Save Success",
+                  duration: Duration(seconds: 3));
+              _f3.requestFocus();
+            });
       } else {
         _errorDialog(
             isHideCancle: false,
@@ -98,14 +113,15 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future _saveData() async {
-    await databaseHelper.insertSqlite('tableName', {
-      '': _userController.text.trim(),
-      '': _locationController.text.trim(),
-      '': _barcodeController.text.trim(),
-      '': _b1Controller.text.trim(),
-      '': _b2Controller.text.trim(),
-      '': _b3Controller.text.trim(),
-      '': _b4Controller.text.trim()
+    await databaseHelper.insertSqlite('DATASHEET', {
+      'USER': _userController.text.trim(),
+      'LOCATION': _locationController.text.trim(),
+      'DATE': DateFormat('dd-MM-yyyy HH:mm').format(DateTime.now()),
+      'BARCODE': _barcodeController.text.trim(),
+      'B1': _b1Controller.text.trim(),
+      'B2': _b2Controller.text.trim(),
+      'B3': _b3Controller.text.trim(),
+      'B4': _b4Controller.text.trim()
     });
   }
 

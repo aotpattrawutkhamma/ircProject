@@ -75,13 +75,33 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     _createFileCsv(db, newVersion);
+    _createDataSheet(db, newVersion);
   }
 
   void _createFileCsv(Database db, int newVersion) async {
-    await db.execute('CREATE TABLE FileCsv ('
+    try {
+      await db.execute('CREATE TABLE FileCsv ('
+          'ID INTEGER PRIMARY KEY AUTOINCREMENT, '
+          'LOCATION TEXT,'
+          'DATA TEXT'
+          ')');
+      print("Table created successfully");
+    } catch (e) {
+      print("Error creating table: $e");
+    }
+  }
+
+  void _createDataSheet(Database db, int newVersion) async {
+    await db.execute('CREATE TABLE IF NOT EXISTS DATASHEET ('
         'ID INTEGER PRIMARY KEY AUTOINCREMENT, '
+        'USER TEXT,'
         'LOCATION TEXT,'
-        'DATA TEXT'
+        'DATE,'
+        'BARCODE,'
+        'B1,'
+        'B2,'
+        'B3,'
+        'B4'
         ')');
   }
 }
