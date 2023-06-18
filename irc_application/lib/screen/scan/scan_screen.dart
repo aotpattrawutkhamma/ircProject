@@ -163,7 +163,30 @@ class _ScanScreenState extends State<ScanScreen> {
                     color: COLOR_WHITE,
                   ),
                   onEditingComplete: () {
-                    _checkDataWithLocation();
+                    if (_barcodeController.text.isNotEmpty &&
+                        _locationController.text.isNotEmpty &&
+                        _userController.text.isNotEmpty) {
+                      _checkDataWithLocation();
+                    } else {
+                      _errorDialog(
+                          isHideCancle: false,
+                          text: _userController.text.isEmpty
+                              ? Label("Please Input User")
+                              : _locationController.text.isEmpty
+                                  ? Label("Please Select Location")
+                                  : _barcodeController.text.isEmpty
+                                      ? Label("Please Input User")
+                                      : null,
+                          onpressOk: () {
+                            if (_userController.text.isEmpty) {
+                              _f1.requestFocus();
+                            } else if (_locationController.text.isEmpty) {
+                              _f2.requestFocus();
+                            } else
+                              (_f3.requestFocus());
+                            Navigator.pop(context);
+                          });
+                    }
                   },
                   fillColor: COLOR_WHITE,
                 ),
