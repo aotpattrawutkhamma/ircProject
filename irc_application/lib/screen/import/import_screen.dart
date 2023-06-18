@@ -110,7 +110,7 @@ class _ImportScreenState extends State<ImportScreen> {
   Widget build(BuildContext context) {
     return CustomBg(
         textTitle: const Label(
-          "Import",
+          "IMPORT DATA",
           fontSize: 20,
           color: COLOR_WHITE,
         ),
