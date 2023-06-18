@@ -22,7 +22,6 @@ class ImportScreen extends StatefulWidget {
 
 class _ImportScreenState extends State<ImportScreen> {
   List<CsvModel> csvModelData = [];
-
   List<FileCsvModel> result = [];
   DatabaseHelper databaseHelper = DatabaseHelper();
 

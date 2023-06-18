@@ -90,7 +90,8 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => print("object"),
+                      onTap: () => Navigator.pushNamed(
+                          context, RouterList.EXPROT_SCREEN),
                       child: const Card(
                         color: COLOR_GRAY_BLUE,
                         child: Column(

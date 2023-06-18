@@ -75,6 +75,7 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     _createFileCsv(db, newVersion);
+    _createFileScanCsv(db, newVersion);
   }
 
   void _createFileCsv(Database db, int newVersion) async {
@@ -82,6 +83,19 @@ class DatabaseHelper {
         'ID INTEGER PRIMARY KEY AUTOINCREMENT, '
         'LOCATION TEXT,'
         'DATA TEXT'
+        ')');
+  }
+
+  void _createFileScanCsv(Database db, int newVersion) async {
+    await db.execute('CREATE TABLE FileScanCsv ('
+        'ID INTEGER PRIMARY KEY AUTOINCREMENT, '
+        'LOCATION TEXT,'
+        'B1 TEXT'
+        'B2 TEXT'
+        'B3 TEXT'
+        'B4 TEXT'
+        'TIME TEXT'
+        'DATE TEXT'
         ')');
   }
 }
