@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:irc_application/config/app_constants.dart';
 import 'package:irc_application/route/route_generator.dart';
 import 'package:irc_application/services/sqlite.dart';
@@ -32,15 +33,17 @@ class _MenuScreenState extends State<MenuScreen> {
     return CustomBg(
         isHidePreviour: true,
         textTitle: Label(
-          "Count Stock IRC",
+          "CHECK STOCK",
           color: COLOR_WHITE,
           fontSize: 22,
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 4,
+            Flexible(
+              flex: 3,
               child: GridView.count(
+                  shrinkWrap: true,
                   primary: false,
                   padding: const EdgeInsets.all(20),
                   crossAxisSpacing: 10,
@@ -58,7 +61,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             Image(
                               image: AssetImage('assets/icons/csv2.png'),
                               color: COLOR_WHITE,
-                              width: 125,
+                              width: 160,
                             ),
                             Label("Import")
                           ],
@@ -78,7 +81,7 @@ class _MenuScreenState extends State<MenuScreen> {
                               child: Image(
                                 image: AssetImage('assets/icons/scanp.png'),
                                 color: COLOR_WHITE,
-                                width: 120,
+                                width: 150,
                               ),
                             ),
                             Label("Scan")
@@ -111,6 +114,13 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
                     ),
                   ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: Label(
+                "Date - Time : ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}",
+                color: COLOR_WHITE,
+              ),
             ),
           ],
         ));

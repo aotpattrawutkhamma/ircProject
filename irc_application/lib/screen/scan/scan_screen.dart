@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:irc_application/config/app_constants.dart';
 import 'package:irc_application/widgets/Custom_bg.dart';
 import 'package:irc_application/widgets/Custom_button.dart';
@@ -113,7 +114,7 @@ class _ScanScreenState extends State<ScanScreen> {
   Widget build(BuildContext context) {
     return CustomBg(
         textTitle: Label(
-          "Scan",
+          "SCAN CHECK",
           fontSize: 24,
           color: COLOR_WHITE,
         ),
@@ -121,6 +122,7 @@ class _ScanScreenState extends State<ScanScreen> {
           padding: const EdgeInsets.all(15.0),
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomInputField(
                   focusNode: _f1,
@@ -134,100 +136,90 @@ class _ScanScreenState extends State<ScanScreen> {
                   },
                   fillColor: COLOR_WHITE,
                 ),
-                SizedBox(
-                  height: 15,
+                const SizedBox(
+                  height: 5,
                 ),
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                        child: Label(
+                    Label(
                       "Location:",
                       color: COLOR_WHITE,
-                    )),
-                    Expanded(flex: 4, child: _dropdownButton())
+                    ),
+                    Row(
+                      children: [Expanded(flex: 4, child: _dropdownButton())],
+                    ),
                   ],
                 ),
-                SizedBox(
-                  height: 15,
+                const SizedBox(
+                  height: 5,
                 ),
                 CustomInputField(
-                  height: 70,
                   focusNode: _f3,
                   controller: _barcodeController,
                   maxLines: 2,
-                  labeltext: Padding(
-                    padding: const EdgeInsets.only(bottom: 25),
-                    child: Label(
-                      "Barcode : ",
-                      color: COLOR_WHITE,
-                    ),
+                  labeltext: Label(
+                    "Barcode : ",
+                    color: COLOR_WHITE,
                   ),
                   onEditingComplete: () {
                     _checkDataWithLocation();
                   },
                   fillColor: COLOR_WHITE,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomInputField(
-                        controller: _b1Controller,
-                        labeltext: Label(
-                          "B1 : ",
-                          color: COLOR_WHITE,
-                        ),
-                        enabled: false,
-                        fillColor: COLOR_WHITE.withOpacity(0.8),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      child: CustomInputField(
-                        controller: _b2Controller,
-                        labeltext: Label(
-                          "B2 : ",
-                          color: COLOR_WHITE,
-                        ),
-                        enabled: false,
-                        fillColor: COLOR_WHITE.withOpacity(0.8),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15,
+                const SizedBox(
+                  height: 10,
                 ),
                 Row(
                   children: [
                     Expanded(
-                      child: CustomInputField(
-                        controller: _b3Controller,
-                        labeltext: Label(
-                          "B3 : ",
-                          color: COLOR_WHITE,
-                        ),
-                        enabled: false,
-                        fillColor: COLOR_WHITE.withOpacity(0.8),
+                      child: Label(
+                        "B1 : ${_b1Controller.text} ",
+                        color: COLOR_WHITE,
                       ),
                     ),
-                    SizedBox(
-                      width: 5,
-                    ),
                     Expanded(
-                      child: CustomInputField(
-                        controller: _b4Controller,
-                        labeltext: Label(
-                          "B4 : ",
-                          color: COLOR_WHITE,
-                        ),
-                        enabled: false,
-                        fillColor: COLOR_WHITE.withOpacity(0.8),
+                      child: Label(
+                        "B2 : ${_b2Controller.text}",
+                        color: COLOR_WHITE,
                       ),
                     ),
                   ],
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Label(
+                        "B3 : ${_b3Controller.text} ",
+                        color: COLOR_WHITE,
+                      ),
+                    ),
+                    Expanded(
+                      child: Label(
+                        "B4 : ${_b4Controller.text} ",
+                        color: COLOR_WHITE,
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(
+                  color: COLOR_WHITE,
+                  thickness: 2,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Label(
+                  "Record Count : ${itemList.skip(1).length}",
+                  color: COLOR_WHITE,
+                ),
+                Label(
+                  "Date - Time ${DateFormat("dd/MM/yyyy HH:mm").format(DateTime.now())}",
+                  color: COLOR_WHITE,
+                )
               ],
             ),
           ),
@@ -247,16 +239,24 @@ class _ScanScreenState extends State<ScanScreen> {
       ),
       isExpanded: true,
       hint: Center(
-        child: Text(
-          'Please Select',
-          style: TextStyle(fontSize: 14),
-        ),
+        child: itemList.isNotEmpty
+            ? Text(
+                'Please Select Location',
+                style: TextStyle(fontSize: 14),
+              )
+            : Text(
+                'Please Import Data',
+                style: TextStyle(fontSize: 14),
+              ),
       ),
       items: _location
           .skip(1)
           .map((item) => DropdownMenuItem<String>(
                 value: item,
-                child: Label(item),
+                child: Label(
+                  item,
+                  color: COLOR_GRAY_BLUE,
+                ),
               ))
           .toList(),
       onChanged: (value) {
@@ -267,14 +267,14 @@ class _ScanScreenState extends State<ScanScreen> {
       },
       buttonStyleData: const ButtonStyleData(
         height: 50,
-        padding: EdgeInsets.only(left: 20, right: 10),
+        padding: EdgeInsets.only(left: 0, right: 10),
       ),
       iconStyleData: const IconStyleData(
         icon: Icon(
           Icons.arrow_drop_down,
           color: Colors.black45,
         ),
-        iconSize: 20,
+        iconSize: 50,
       ),
       dropdownStyleData: DropdownStyleData(
         decoration: BoxDecoration(

@@ -11,7 +11,8 @@ class CustomInputField extends StatelessWidget {
       this.onEditingComplete,
       this.focusNode,
       this.height,
-      this.maxLines});
+      this.maxLines,
+      this.colorText = COLOR_GRAY_BLUE});
   final Widget? labeltext;
   final bool? enabled;
   final TextEditingController? controller;
@@ -20,32 +21,38 @@ class CustomInputField extends StatelessWidget {
   final FocusNode? focusNode;
   final double? height;
   final int? maxLines;
+  final Color colorText;
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         labeltext ?? Container(),
-        Expanded(
-          flex: 4,
-          child: Container(
-            height: height ?? 40,
-            child: TextFormField(
-              maxLines: 1,
-              focusNode: focusNode,
-              onEditingComplete: () => onEditingComplete?.call(),
-              controller: controller,
-              enabled: enabled,
-              textAlignVertical: TextAlignVertical.center,
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                  filled: true,
-                  fillColor: fillColor,
-                  focusedBorder: OutlineInputBorder(),
-                  focusColor: Colors.transparent,
-                  border: OutlineInputBorder()),
-            ),
-          ),
-        )
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: height ?? 40,
+                child: TextFormField(
+                  maxLines: 1,
+                  focusNode: focusNode,
+                  onEditingComplete: () => onEditingComplete?.call(),
+                  controller: controller,
+                  enabled: enabled,
+                  textAlignVertical: TextAlignVertical.center,
+                  style: TextStyle(color: colorText),
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                      filled: true,
+                      fillColor: fillColor,
+                      focusedBorder: OutlineInputBorder(),
+                      focusColor: Colors.transparent,
+                      border: OutlineInputBorder()),
+                ),
+              ),
+            )
+          ],
+        ),
       ],
     );
   }
