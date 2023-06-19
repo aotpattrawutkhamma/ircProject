@@ -113,6 +113,7 @@ class DatabaseHelper {
         'ID INTEGER PRIMARY KEY AUTOINCREMENT, '
         'LOCATION TEXT,'
         'USER TEXT,'
+        'BARCODE TEXT ,'
         'B1 TEXT,'
         'B2 TEXT,'
         'B3 TEXT,'

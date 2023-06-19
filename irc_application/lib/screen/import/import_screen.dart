@@ -22,7 +22,6 @@ class ImportScreen extends StatefulWidget {
 
 class _ImportScreenState extends State<ImportScreen> {
   List<CsvModel> csvModelData = [];
-  List<CsvModel> _tempCsv = [];
   List<FileCsvModel> result = [];
   DatabaseHelper databaseHelper = DatabaseHelper();
 
@@ -57,23 +56,20 @@ class _ImportScreenState extends State<ImportScreen> {
     if (csvModelData.isNotEmpty) {
       var sql = await databaseHelper.queryData('FileCsv');
       if (sql.isEmpty) {
-        print("isEmptry");
         csvModelData.forEach((element) async {
           await databaseHelper.insertSqlite(
               'FileCsv', {'LOCATION': element.LOCATION, 'DATA': element.DATA});
         });
+        csvModelData.clear();
         await _getData();
       } else if (sql.isNotEmpty) {
-        _errorDialog(
-            text: Label("Do you want to save again ?"),
-            onpressOk: () async {
-              await databaseHelper.deleted('FileCsv');
-              csvModelData.forEach((element) async {
-                await databaseHelper.insertSqlite('FileCsv',
-                    {'LOCATION': element.LOCATION, 'DATA': element.DATA});
-              });
-              Navigator.pop(context);
-            });
+        await databaseHelper.deleted('FileCsv');
+        csvModelData.forEach((element) async {
+          await databaseHelper.insertSqlite(
+              'FileCsv', {'LOCATION': element.LOCATION, 'DATA': element.DATA});
+        });
+        csvModelData.clear();
+        await _getData();
       }
     }
   }
@@ -92,9 +88,7 @@ class _ImportScreenState extends State<ImportScreen> {
       setState(() {
         result = sqlData.map((e) => FileCsvModel.fromMap(e)).toList();
       });
-    } else {
-      print("Nodata");
-    }
+    } else {}
   }
 
   Future _deleted() async {
@@ -105,7 +99,6 @@ class _ImportScreenState extends State<ImportScreen> {
         result.clear();
         csvModelData.clear();
       });
-      print("Test ${result.length}");
     } else if (csvModelData.isNotEmpty) {
       setState(() {
         csvModelData.clear();
@@ -117,88 +110,90 @@ class _ImportScreenState extends State<ImportScreen> {
   Widget build(BuildContext context) {
     return CustomBg(
         textTitle: const Label(
-          "Import",
+          "IMPORT DATA",
           fontSize: 20,
           color: COLOR_WHITE,
         ),
         body: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: CustomButton(
-                  backgroundColor: COLOR_GREEN_LIGHT,
-                  width: 300,
-                  text: Label(
-                    "Import",
-                    color: COLOR_WHITE,
-                  ),
-                  onPressed: _importCSV,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomButton(
-                    backgroundColor:
-                        csvModelData.isNotEmpty ? COLOR_ACTIVE : Colors.grey,
-                    width: 150,
-                    text: Label(
-                      "Save",
-                      color: COLOR_WHITE,
+                  Expanded(
+                    child: CustomButton(
+                      backgroundColor:
+                          csvModelData.isNotEmpty ? COLOR_ACTIVE : Colors.grey,
+                      text: Label(
+                        "Save",
+                        color: COLOR_WHITE,
+                      ),
+                      onPressed: () async {
+                        if (csvModelData.isNotEmpty) {
+                          _errorDialog(
+                              text: Label(
+                                  "Do you want to save  ? \nRecord : ${csvModelData.skip(1).length}"),
+                              onpressOk: () async {
+                                _saveData();
+                                Navigator.pop(context);
+                              });
+                        } else {
+                          _errorDialog(
+                              isHideCancle: false,
+                              text: Label("Please Import CSV"),
+                              onpressOk: () async {
+                                Navigator.pop(context);
+                              });
+                        }
+                      },
                     ),
-                    onPressed: () async {
-                      if (csvModelData.isNotEmpty) {
-                        _errorDialog(
-                            text: Label(
-                                "Do you want to save  ? \nRecord : ${csvModelData.length}"),
-                            onpressOk: () async {
-                              _saveData();
-                              Navigator.pop(context);
-                            });
-                      } else {
-                        _errorDialog(
-                            isHideCancle: false,
-                            text: Label("Please Import CSV"),
-                            onpressOk: () async {
-                              Navigator.pop(context);
-                            });
-                      }
-                    },
                   ),
-                  SizedBox(
-                    width: 15,
+                  const SizedBox(
+                    width: 10,
                   ),
-                  CustomButton(
-                    backgroundColor:
-                        result.isNotEmpty ? COLOR_DANGER : Colors.grey,
-                    width: 150,
-                    text: Label(
-                      "Clear",
-                      color: COLOR_WHITE,
+                  Expanded(
+                    flex: 2,
+                    child: CustomButton(
+                      backgroundColor: COLOR_GREEN_LIGHT,
+                      text: Label(
+                        "Import",
+                        color: COLOR_WHITE,
+                      ),
+                      onPressed: _importCSV,
                     ),
-                    onPressed: () async {
-                      if (result.isNotEmpty) {
-                        _errorDialog(
-                            text: Label("Do you want to Delete ?"),
-                            onpressOk: () async {
-                              await _deleted();
-                              Navigator.pop(context);
-                            });
-                      } else {
-                        _errorDialog(
-                            isHideCancle: false,
-                            text: Label("Please Save Data"),
-                            onpressOk: () async {
-                              Navigator.pop(context);
-                            });
-                      }
-                    },
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: CustomButton(
+                      backgroundColor:
+                          result.isNotEmpty ? COLOR_DANGER : Colors.grey,
+                      text: Label(
+                        "Clear",
+                        color: COLOR_WHITE,
+                      ),
+                      onPressed: () async {
+                        if (result.isNotEmpty) {
+                          _errorDialog(
+                              text: Label("Do you want to Delete ?"),
+                              onpressOk: () async {
+                                await _deleted();
+                                Navigator.pop(context);
+                              });
+                        } else {
+                          _errorDialog(
+                              isHideCancle: false,
+                              text: Label("Please Save Data"),
+                              onpressOk: () async {
+                                Navigator.pop(context);
+                              });
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -211,11 +206,17 @@ class _ImportScreenState extends State<ImportScreen> {
               const SizedBox(
                 height: 10,
               ),
-              Label(
-                "Record: ${csvModelData.length} row",
-                color: COLOR_WHITE,
-                fontSize: 20,
-              ),
+              csvModelData.isNotEmpty
+                  ? Label(
+                      "Record: ${(csvModelData.skip(1).length)} row",
+                      color: COLOR_WHITE,
+                      fontSize: 20,
+                    )
+                  : Label(
+                      "Record: ${(result.skip(1).length)} row",
+                      color: COLOR_WHITE,
+                      fontSize: 20,
+                    ),
               const SizedBox(
                 height: 10,
               ),
@@ -279,11 +280,12 @@ class _ImportScreenState extends State<ImportScreen> {
                                 ]);
                               }).toList()
                             : result.isNotEmpty
-                                ? result.skip(1).map((e) {
+                                ? result.skip(1).map((data) {
                                     return DataRow(cells: [
-                                      DataCell(Text(e.LOCATION ?? '')),
-                                      DataCell(Text(
-                                        e.DATA ?? '',
+                                      DataCell(Label(data.LOCATION ?? '')),
+                                      DataCell(Label(
+                                        data.DATA ?? '',
+                                        fontSize: 15,
                                       )),
                                     ]);
                                   }).toList()
