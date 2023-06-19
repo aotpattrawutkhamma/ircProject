@@ -70,6 +70,7 @@ class _ScanScreenState extends State<ScanScreen> {
           isFound = false;
         }
       }
+      //BT-571-A+230328R002+448+20230428
       if (isFound == true) {
         setState(() {
           _b1Controller.text = _barcodeController.text.substring(0, 8);
@@ -79,6 +80,7 @@ class _ScanScreenState extends State<ScanScreen> {
           if (_b4Controller.text.trim() == _b3Controller.text.trim()) {
             _b4Controller.clear();
           }
+          _saveData();
         });
       } else {
         _errorDialog(
@@ -100,14 +102,15 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future _saveData() async {
-    await databaseHelper.insertSqlite('tableName', {
-      '': _userController.text.trim(),
-      '': _locationController.text.trim(),
-      '': _barcodeController.text.trim(),
-      '': _b1Controller.text.trim(),
-      '': _b2Controller.text.trim(),
-      '': _b3Controller.text.trim(),
-      '': _b4Controller.text.trim()
+    await databaseHelper.insertSqlite('FileScanCsv', {
+      'LOCATION': _locationController.text.trim(),
+      'USER': _userController.text.trim(),
+      'B1': _b1Controller.text.trim(),
+      'B2': _b2Controller.text.trim(),
+      'B3': _b3Controller.text.trim(),
+      'B4': _b4Controller.text,
+      'TIME': DateFormat('HH:mm:ss').format(DateTime.now()),
+      'DATE': DateFormat('yyyy-MM-dd ').format(DateTime.now()),
     });
   }
 

@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+import '../modelsSqlite/fileCsvScanModel.dart';
+
 class DatabaseHelper {
   static DatabaseHelper? _databaseHelper;
   static Database? _database;
@@ -63,6 +65,26 @@ class DatabaseHelper {
     return await db.query(tableName);
   }
 
+  Future<void> writeTableData_ScanCheck({FileCsvScanModel? model}) async {
+    try {
+      Database db = await DatabaseHelper().database;
+      Map<String, dynamic> row = {
+        'LOCATION': model?.LOCATION,
+        'USER': model?.USER,
+        'B1': model?.B1,
+        'B2': model?.B2,
+        'B3': model?.B3,
+        'B4': model?.B4,
+        'TIME': model?.TIME,
+        'DATE': model?.DATE,
+      };
+      int id = await db.insert('FileScanCsv', row);
+      print('Data written to SQLite with id: $id');
+    } catch (e) {
+      print('Error writing to SQLite: $e');
+    }
+  }
+
   Future<int> deletedRowSqlite(
       {String? tableName, String? columnName, dynamic? columnValue}) async {
     Database db = await this.database;
@@ -90,11 +112,12 @@ class DatabaseHelper {
     await db.execute('CREATE TABLE FileScanCsv ('
         'ID INTEGER PRIMARY KEY AUTOINCREMENT, '
         'LOCATION TEXT,'
-        'B1 TEXT'
-        'B2 TEXT'
-        'B3 TEXT'
-        'B4 TEXT'
-        'TIME TEXT'
+        'USER TEXT,'
+        'B1 TEXT,'
+        'B2 TEXT,'
+        'B3 TEXT,'
+        'B4 TEXT,'
+        'TIME TEXT,'
         'DATE TEXT'
         ')');
   }
