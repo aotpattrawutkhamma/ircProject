@@ -101,7 +101,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                 child: Padding(
                               padding: EdgeInsets.only(top: 10),
                               child: Image(
-                                image: AssetImage('assets/icons/scanp.png'),
+                                image: AssetImage('assets/icons/pngwing2.png'),
                                 color: COLOR_WHITE,
                                 width: 150,
                               ),
