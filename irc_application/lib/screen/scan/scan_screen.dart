@@ -32,6 +32,7 @@ class _ScanScreenState extends State<ScanScreen> {
 
   List<FileCsvModel> itemList = [];
   List<String> _location = [];
+  List<Map<String, dynamic>> _scanned = [];
   final FocusNode _f1 = FocusNode();
   final FocusNode _f2 = FocusNode();
   final FocusNode _f3 = FocusNode();
@@ -49,7 +50,14 @@ class _ScanScreenState extends State<ScanScreen> {
     }
   }
 
-  Future _delete() async {}
+  Future _getDataFileScaned() async {
+    var sql = await databaseHelper.queryData('FileScanCsv');
+    if (sql.isNotEmpty) {
+      setState(() {
+        _scanned = sql;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -57,6 +65,7 @@ class _ScanScreenState extends State<ScanScreen> {
     super.initState();
     _f1.requestFocus();
     _getData();
+    _getDataFileScaned();
   }
 
   Future _checkDataWithLocation() async {
@@ -108,7 +117,8 @@ class _ScanScreenState extends State<ScanScreen> {
     var sql = await databaseHelper.queryData('FileScanCsv');
     bool isFound = false;
     for (var items in sql) {
-      if (_barcodeController.text == items['BARCODE']) {
+      if (_barcodeController.text == items['BARCODE'] &&
+          _locationController.text == items['LOCATION']) {
         isFound = true;
         break;
       } else {
@@ -144,6 +154,7 @@ class _ScanScreenState extends State<ScanScreen> {
       });
       EasyLoading.showSuccess("Save Complete", duration: Duration(seconds: 3));
       _barcodeController.clear();
+      _getDataFileScaned();
     }
   }
 
@@ -283,7 +294,7 @@ class _ScanScreenState extends State<ScanScreen> {
                   height: 5,
                 ),
                 Label(
-                  "Record Count : ${itemList.skip(1).length}",
+                  "Record Count : ${_scanned.length}",
                   color: COLOR_WHITE,
                 ),
                 Label(
