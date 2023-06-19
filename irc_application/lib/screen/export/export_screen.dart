@@ -51,54 +51,55 @@ class _ExportScreenState extends State<ExportScreen> {
   }
 
   Future<void> _ExportCSV() async {
-    // final futures = <Future>[];
-    // futures
-    //     .add(send("TIME", "DATE", "USER", "B1", "B2", "B3", "B4", "LOCATION"));
-
-    // df = pd.DataFrame({'name': ['John', 'Doe', 'Sam', 'Joel'],
-    //   'age': [18, 10, 15, 32],
-    //   'sex': ['Male', 'Female', 'Female', 'Male']
-    // })
-
-    var data = 'TIME';
-    data += ',DATE';
-    data += ',USER';
-    data += ',B1';
-    data += ',B2';
-    data += ',B3';
-    data += ',B4';
-    data += ',LOCATION';
-    data += '\r';
-
-    var listData = result.length;
     if (result.isNotEmpty) {
-      result.forEach((element) {
-        data += '${element.TIME.toString()}';
-        data += ',${element.DATE.toString()}';
-        data += ',${element.USER.toString()}';
-        data += ',${element.B1.toString()}';
-        data += ',${element.B2.toString()}';
-        data += ',${element.B3.toString()}';
-        data += ',${element.B4.toString()}';
-        data += ',${element.LOCATION.toString()}';
-        data += '\r';
-      });
-    }
+      var data = 'DATE';
+      data += ',TIME';
+      data += ',USER';
+      data += ',B1';
+      data += ',B2';
+      data += ',B3';
+      data += ',B4';
+      data += ',LOCATION';
+      data += '\r';
 
-    var selectDirectory = '/storage/101D-3E1F/Download/';
-    var filename = await getFilename('CSV');
-    var pathFile = '$selectDirectory/$filename';
-
-    var file = File(pathFile);
-    var resultCSV = await file.writeAsString(data);
-    _deleted();
-    _succeedDialog(
-        text: Label("Do you want to Delete ?"),
-        isHideCancle: false,
-        onpressOk: () async {
-          await _deleted();
-          Navigator.pop(context);
+      var listData = result.length;
+      if (result.isNotEmpty) {
+        result.forEach((element) {
+          data += '${element.DATE.toString()}';
+          data += ',${element.TIME.toString()}';
+          data += ',${element.USER.toString()}';
+          data += ',${element.B1.toString()}';
+          data += ',${element.B2.toString()}';
+          data += ',${element.B3.toString()}';
+          data += ',${element.B4.toString()}';
+          data += ',${element.LOCATION.toString()}';
+          data += '\r';
         });
+      }
+
+      var selectDirectory = '/storage/101D-3E1F/Download/';
+      var filename = await getFilename('CSV');
+      var pathFile = '$selectDirectory/$filename';
+
+      var file = File(pathFile);
+      var resultCSV = await file.writeAsString(data);
+      _deleted();
+      _Dialog(
+          text: Label("Save Complete" + '\n' + "File Name : " + '$filename'),
+          isHideCancle: false,
+          onpressOk: () async {
+            await _deleted();
+            Navigator.pop(context);
+          });
+    } else {
+      _Dialog(
+          text: Label("Data not Found"),
+          isHideCancle: false,
+          onpressOk: () async {
+            await _deleted();
+            Navigator.pop(context);
+          });
+    }
   }
 
   // Future send(String TIME, String DATE, String USER, String B1, String B2,
@@ -147,7 +148,7 @@ class _ExportScreenState extends State<ExportScreen> {
   Widget build(BuildContext context) {
     return CustomBg(
       textTitle: const Label(
-        "Export",
+        "EXPORT DATA",
         fontSize: 20,
         color: COLOR_WHITE,
       ),
@@ -187,7 +188,7 @@ class _ExportScreenState extends State<ExportScreen> {
                       border: TableBorder.all(width: 1),
                       columnSpacing: 20,
                       horizontalMargin: 15,
-                      columns: [
+                      columns: const [
                         DataColumn(label: Label('LOCATION')),
                         DataColumn(label: Center(child: Label('USER'))),
                         DataColumn(label: Center(child: Label('B1'))),
@@ -234,7 +235,7 @@ class _ExportScreenState extends State<ExportScreen> {
     );
   }
 
-  void _succeedDialog(
+  void _Dialog(
       {Label? text,
       Function? onpressOk,
       Function? onpressCancel,
