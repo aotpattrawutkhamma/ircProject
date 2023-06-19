@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:irc_application/route/route_generator.dart';
 import 'package:irc_application/screen/menu_screen.dart';
 
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      builder: EasyLoading.init(),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
       initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,

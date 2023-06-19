@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:irc_application/config/app_constants.dart';
 import 'package:irc_application/widgets/Custom_bg.dart';
@@ -47,6 +48,8 @@ class _ScanScreenState extends State<ScanScreen> {
       print("Nodata");
     }
   }
+
+  Future _delete() async {}
 
   @override
   void initState() {
@@ -102,16 +105,46 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   Future _saveData() async {
-    await databaseHelper.insertSqlite('FileScanCsv', {
-      'LOCATION': _locationController.text.trim(),
-      'USER': _userController.text.trim(),
-      'B1': _b1Controller.text.trim(),
-      'B2': _b2Controller.text.trim(),
-      'B3': _b3Controller.text.trim(),
-      'B4': _b4Controller.text,
-      'TIME': DateFormat('HH:mm:ss').format(DateTime.now()),
-      'DATE': DateFormat('yyyy-MM-dd ').format(DateTime.now()),
-    });
+    var sql = await databaseHelper.queryData('FileScanCsv');
+    bool isFound = false;
+    for (var items in sql) {
+      if (_barcodeController.text == items['BARCODE']) {
+        isFound = true;
+        break;
+      } else {
+        isFound = false;
+      }
+    }
+    if (isFound == true) {
+      _errorDialog(
+          isHideCancle: false,
+          text: Label("Location ${_locationController.text} duplicate"),
+          onpressOk: () {
+            setState(() {
+              _barcodeController.clear();
+              _b1Controller.text = '';
+              _b2Controller.text = '';
+              _b3Controller.text = '';
+              _b4Controller.text = '';
+            });
+
+            Navigator.pop(context);
+          });
+    } else {
+      await databaseHelper.insertSqlite('FileScanCsv', {
+        'LOCATION': _locationController.text.trim(),
+        'USER': _userController.text.trim(),
+        'BARCODE': _barcodeController.text.trim(),
+        'B1': _b1Controller.text.trim(),
+        'B2': _b2Controller.text.trim(),
+        'B3': _b3Controller.text.trim(),
+        'B4': _b4Controller.text,
+        'TIME': DateFormat('HH:mm:ss').format(DateTime.now()),
+        'DATE': DateFormat('yyyy-MM-dd ').format(DateTime.now()),
+      });
+      EasyLoading.showSuccess("Save Complete", duration: Duration(seconds: 3));
+      _barcodeController.clear();
+    }
   }
 
   @override
@@ -193,6 +226,16 @@ class _ScanScreenState extends State<ScanScreen> {
                     }
                   },
                   fillColor: COLOR_WHITE,
+                  onChanged: (value) {
+                    if (value.isNotEmpty) {
+                      setState(() {
+                        _b1Controller.text = '';
+                        _b2Controller.text = '';
+                        _b3Controller.text = '';
+                        _b4Controller.text = '';
+                      });
+                    }
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -282,7 +325,7 @@ class _ScanScreenState extends State<ScanScreen> {
                 value: item,
                 child: Label(
                   item,
-                  color: COLOR_GRAY_BLUE,
+                  color: COLOR_DARK_BLUE,
                 ),
               ))
           .toList(),
@@ -339,9 +382,12 @@ class _ScanScreenState extends State<ScanScreen> {
                 visible: isHideCancle,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(COLOR_AMBER)),
+                      backgroundColor: MaterialStatePropertyAll(COLOR_ACTIVE)),
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
+                  child: const Label(
+                    'Cancel',
+                    color: COLOR_WHITE,
+                  ),
                 ),
               ),
               Visibility(
@@ -350,11 +396,13 @@ class _ScanScreenState extends State<ScanScreen> {
                   width: 15,
                 ),
               ),
-              ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(COLOR_AMBER)),
-                onPressed: () => onpressOk?.call(),
-                child: const Text('OK'),
+              Expanded(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(COLOR_ACTIVE)),
+                  onPressed: () => onpressOk?.call(),
+                  child: const Label('OK', color: COLOR_WHITE),
+                ),
               ),
             ],
           )
