@@ -140,7 +140,7 @@ class _ScanScreenState extends State<ScanScreen> {
 
             Navigator.pop(context);
           });
-    } else {
+    } else if (isFound == false) {
       await databaseHelper.insertSqlite('FileScanCsv', {
         'LOCATION': _locationController.text.trim(),
         'USER': _userController.text.trim(),
