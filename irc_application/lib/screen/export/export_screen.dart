@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:dotted_line/dotted_line.dart';
+import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:irc_application/config/app_constants.dart';
 import 'package:irc_application/models/csvModel.dart';
@@ -77,7 +78,9 @@ class _ExportScreenState extends State<ExportScreen> {
         });
       }
 
-      var selectDirectory = '/storage/101D-3E1F/Download/';
+      var selectDirectory =
+          await ExternalPath.getExternalStoragePublicDirectory(
+              ExternalPath.DIRECTORY_DOWNLOADS);
       var filename = await getFilename('CSV');
       var pathFile = '$selectDirectory/$filename';
 
