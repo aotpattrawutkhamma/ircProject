@@ -9,7 +9,7 @@ class CsvModel {
   static CsvModel fromJson(dynamic json) {
     return CsvModel(
       LOCATION: json['Location'],
-      DATA: json['DATA'],
+      DATA: json['DATA'] ?? json['Data'],
     );
   }
 }
