@@ -56,14 +56,22 @@ class _MenuScreenState extends State<MenuScreen> {
                       child: const Card(
                         color: COLOR_GRAY_BLUE,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Image(
-                              image: AssetImage('assets/icons/csv2.png'),
-                              color: COLOR_WHITE,
-                              width: 160,
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Image(
+                                  image: AssetImage('assets/icons/csv2.png'),
+                                  color: COLOR_WHITE,
+                                  width: 160,
+                                ),
+                              ),
                             ),
-                            Label("Import")
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Label("Import"),
+                            )
                           ],
                         ),
                       ),
@@ -74,17 +82,22 @@ class _MenuScreenState extends State<MenuScreen> {
                       child: const Card(
                         color: COLOR_GRAY_BLUE,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: Image(
-                                image: AssetImage('assets/icons/scanp.png'),
-                                color: COLOR_WHITE,
-                                width: 150,
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Image(
+                                  image: AssetImage('assets/icons/scanp.png'),
+                                  color: COLOR_WHITE,
+                                  width: 150,
+                                ),
                               ),
                             ),
-                            Label("Scan")
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Label("Scan"),
+                            )
                           ],
                         ),
                       ),
@@ -95,7 +108,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       child: const Card(
                         color: COLOR_GRAY_BLUE,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Expanded(
                                 child: Padding(

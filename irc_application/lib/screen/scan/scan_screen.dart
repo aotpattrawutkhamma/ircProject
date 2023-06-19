@@ -85,6 +85,7 @@ class _ScanScreenState extends State<ScanScreen> {
             isHideCancle: false,
             text: Label("Product Location Invaild"),
             onpressOk: () {
+              _barcodeController.clear();
               _b1Controller.clear();
               _b2Controller.clear();
               _b3Controller.clear();
