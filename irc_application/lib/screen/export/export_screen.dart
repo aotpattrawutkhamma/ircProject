@@ -3,6 +3,7 @@ import 'package:android_path_provider/android_path_provider.dart';
 import 'package:csv/csv.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:irc_application/config/app_constants.dart';
 import 'package:irc_application/models/csvModel.dart';
 import 'package:irc_application/models/csvScanModel.dart';
@@ -92,32 +93,84 @@ class _ExportScreenState extends State<ExportScreen> {
         var file = File(pathFile);
         await file.writeAsString(data);
         _deleted();
-        _Dialog(
-            text: Label("Save Complete" + '\n' + "File Name : " + '$filename'),
-            isHideCancle: false,
-            onpressOk: () async {
-              await _deleted();
-              Navigator.pop(context);
-            });
+        Alert(
+            context: context,
+            type: AlertType.success,
+            closeIcon: Label(""),
+            desc: "Save Complete" + '\n' + "File Name : " + '$filename',
+            style: AlertStyle(
+                descPadding: EdgeInsets.only(top: 5),
+                descStyle: TextStyle(fontSize: 16)),
+            buttons: [
+              DialogButton(
+                  color: COLOR_ACTIVE,
+                  child: Label("OK", color: COLOR_WHITE),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    EasyLoading.showSuccess("Save Success",
+                        duration: Duration(seconds: 3));
+                  })
+            ]).show();
+        // _Dialog(
+        //     text: Label("Save Complete" + '\n' + "File Name : " + '$filename'),
+        //     isHideCancle: false,
+        //     onpressOk: () async {
+        //       await _deleted();
+        //       Navigator.pop(context);
+        //     });
       } else {
-        _Dialog(
-            text: Label("Data not Found"),
-            isHideCancle: false,
-            onpressOk: () async {
-              await _deleted();
-              Navigator.pop(context);
-            });
+        Alert(
+            context: context,
+            type: AlertType.warning,
+            closeIcon: Label(""),
+            desc: "Please Scan Check",
+            style: AlertStyle(
+                descPadding: EdgeInsets.only(top: 5),
+                descStyle: TextStyle(fontSize: 16)),
+            buttons: [
+              DialogButton(
+                  color: COLOR_ACTIVE,
+                  child: Label("OK", color: COLOR_WHITE),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  })
+            ]).show();
+
+        // _Dialog(
+        //     text: Label("Data not Found"),
+        //     isHideCancle: false,
+        //     onpressOk: () async {
+        //       await _deleted();
+        //       Navigator.pop(context);
+        //     });
       }
     } else {
-      _Dialog(
-          text: Label(
-            "Exception",
-            maxLines: 100,
-          ),
-          isHideCancle: false,
-          onpressOk: () async {
-            Navigator.pop(context);
-          });
+      Alert(
+          context: context,
+          type: AlertType.error,
+          closeIcon: Label(""),
+          desc: "Exception",
+          style: AlertStyle(
+              descPadding: EdgeInsets.only(top: 5),
+              descStyle: TextStyle(fontSize: 16)),
+          buttons: [
+            DialogButton(
+                color: COLOR_ACTIVE,
+                child: Label("OK", color: COLOR_WHITE),
+                onPressed: () async {
+                  Navigator.pop(context);
+                })
+          ]).show();
+
+      // _Dialog(
+      //     text: Label(
+      //       "Exception",
+      //       maxLines: 100,
+      //     ),
+      //     isHideCancle: false,
+      //     onpressOk: () async {
+      //       Navigator.pop(context);
+      //     });
     }
   }
 
