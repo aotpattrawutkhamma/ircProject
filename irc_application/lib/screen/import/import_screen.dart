@@ -5,6 +5,7 @@ import 'package:csv/csv.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:irc_application/config/app_constants.dart';
 import 'package:irc_application/models/csvModel.dart';
 import 'package:irc_application/modelsSqlite/fileCsvModel.dart';
@@ -12,6 +13,8 @@ import 'package:irc_application/services/sqlite.dart';
 import 'package:irc_application/widgets/Custom_bg.dart';
 import 'package:irc_application/widgets/Custom_button.dart';
 import 'package:irc_application/widgets/Label.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ImportScreen extends StatefulWidget {
   const ImportScreen({super.key});
@@ -133,20 +136,52 @@ class _ImportScreenState extends State<ImportScreen> {
                       ),
                       onPressed: () async {
                         if (csvModelData.isNotEmpty) {
-                          _errorDialog(
-                              text: Label(
-                                  "Do you want to save  ? \nRecord : ${csvModelData.skip(1).length}"),
-                              onpressOk: () async {
-                                _saveData();
-                                Navigator.pop(context);
-                              });
+                          Alert(
+                              context: context,
+                              type: AlertType.warning,
+                              closeIcon: Label(""),
+                              desc:
+                                  "Do you want to save  ? \nRecord : ${csvModelData.skip(1).length}",
+                              style: AlertStyle(
+                                  descPadding: EdgeInsets.only(top: 5),
+                                  descStyle: TextStyle(fontSize: 16)),
+                              buttons: [
+                                DialogButton(
+                                    color: COLOR_DANGER,
+                                    child: Label(
+                                      "Cancel",
+                                      color: COLOR_WHITE,
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                    }),
+                                DialogButton(
+                                    color: COLOR_ACTIVE,
+                                    child: Label("OK", color: COLOR_WHITE),
+                                    onPressed: () async {
+                                      _saveData();
+                                      Navigator.pop(context);
+                                      EasyLoading.showSuccess("Save Success",
+                                          duration: Duration(seconds: 3));
+                                    })
+                              ]).show();
                         } else {
-                          _errorDialog(
-                              isHideCancle: false,
-                              text: Label("Please Import CSV"),
-                              onpressOk: () async {
-                                Navigator.pop(context);
-                              });
+                          Alert(
+                              context: context,
+                              type: AlertType.warning,
+                              closeIcon: Label(""),
+                              desc: "Please Import CSV",
+                              style: AlertStyle(
+                                  descPadding: EdgeInsets.only(top: 5),
+                                  descStyle: TextStyle(fontSize: 16)),
+                              buttons: [
+                                DialogButton(
+                                    color: COLOR_ACTIVE,
+                                    child: Label("OK", color: COLOR_WHITE),
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                    })
+                              ]).show();
                         }
                       },
                     ),
@@ -178,19 +213,51 @@ class _ImportScreenState extends State<ImportScreen> {
                       ),
                       onPressed: () async {
                         if (result.isNotEmpty) {
-                          _errorDialog(
-                              text: Label("Do you want to Delete ?"),
-                              onpressOk: () async {
-                                await _deleted();
-                                Navigator.pop(context);
-                              });
+                          Alert(
+                              context: context,
+                              type: AlertType.warning,
+                              closeIcon: Label(""),
+                              desc: "Do you want to Delete ?",
+                              style: AlertStyle(
+                                  descPadding: EdgeInsets.only(top: 5),
+                                  descStyle: TextStyle(fontSize: 16)),
+                              buttons: [
+                                DialogButton(
+                                    color: COLOR_DANGER,
+                                    child: Label(
+                                      "Cancel",
+                                      color: COLOR_WHITE,
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                    }),
+                                DialogButton(
+                                    color: COLOR_ACTIVE,
+                                    child: Label("OK", color: COLOR_WHITE),
+                                    onPressed: () async {
+                                      await _deleted();
+                                      Navigator.pop(context);
+                                      EasyLoading.showSuccess("Delete Success",
+                                          duration: Duration(seconds: 3));
+                                    })
+                              ]).show();
                         } else {
-                          _errorDialog(
-                              isHideCancle: false,
-                              text: Label("Please Save Data"),
-                              onpressOk: () async {
-                                Navigator.pop(context);
-                              });
+                          Alert(
+                              context: context,
+                              type: AlertType.warning,
+                              closeIcon: Label(""),
+                              desc: "Please Save Data",
+                              style: AlertStyle(
+                                  descPadding: EdgeInsets.only(top: 5),
+                                  descStyle: TextStyle(fontSize: 16)),
+                              buttons: [
+                                DialogButton(
+                                    color: COLOR_ACTIVE,
+                                    child: Label("OK", color: COLOR_WHITE),
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                    })
+                              ]).show();
                         }
                       },
                     ),

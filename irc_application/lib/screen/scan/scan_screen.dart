@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:irc_application/config/app_constants.dart';
+import 'package:irc_application/widgets/Custom_alert.dart';
 import 'package:irc_application/widgets/Custom_bg.dart';
 import 'package:irc_application/widgets/Custom_button.dart';
 import 'package:irc_application/widgets/Custom_inputfield.dart';
 import 'package:irc_application/widgets/Label.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../../modelsSqlite/fileCsvModel.dart';
 import '../../services/sqlite.dart';
@@ -95,17 +97,27 @@ class _ScanScreenState extends State<ScanScreen> {
           _saveData();
         });
       } else {
-        _errorDialog(
-            isHideCancle: false,
-            text: Label("Product Location Invaild"),
-            onpressOk: () {
-              _barcodeController.clear();
-              _b1Controller.clear();
-              _b2Controller.clear();
-              _b3Controller.clear();
-              _b4Controller.clear();
-              Navigator.pop(context);
-            });
+        Alert(
+            context: context,
+            type: AlertType.error,
+            closeIcon: Label(""),
+            desc: "Product Location Invaild",
+            style: AlertStyle(
+                descPadding: EdgeInsets.only(top: 5),
+                descStyle: TextStyle(fontSize: 16)),
+            buttons: [
+              DialogButton(
+                  color: COLOR_ACTIVE,
+                  child: Label("OK", color: COLOR_WHITE),
+                  onPressed: () async {
+                    _barcodeController.clear();
+                    _b1Controller.clear();
+                    _b2Controller.clear();
+                    _b3Controller.clear();
+                    _b4Controller.clear();
+                    Navigator.pop(context);
+                  })
+            ]).show();
       }
     } catch (e, s) {
       print(e);
@@ -126,20 +138,31 @@ class _ScanScreenState extends State<ScanScreen> {
       }
     }
     if (isFound == true) {
-      _errorDialog(
-          isHideCancle: false,
-          text: Label("Location ${_locationController.text} duplicate"),
-          onpressOk: () {
-            setState(() {
-              _barcodeController.clear();
-              _b1Controller.text = '';
-              _b2Controller.text = '';
-              _b3Controller.text = '';
-              _b4Controller.text = '';
-            });
+      print("object");
+      Alert(
+          context: context,
+          type: AlertType.error,
+          closeIcon: Label(""),
+          desc: "Location ${_locationController.text} duplicate",
+          style: AlertStyle(
+              descPadding: EdgeInsets.only(top: 5),
+              descStyle: TextStyle(fontSize: 16)),
+          buttons: [
+            DialogButton(
+                color: COLOR_ACTIVE,
+                child: Label("OK", color: COLOR_WHITE),
+                onPressed: () async {
+                  setState(() {
+                    _barcodeController.clear();
+                    _b1Controller.text = '';
+                    _b2Controller.text = '';
+                    _b3Controller.text = '';
+                    _b4Controller.text = '';
+                  });
 
-            Navigator.pop(context);
-          });
+                  Navigator.pop(context);
+                })
+          ]).show();
     } else if (isFound == false) {
       await databaseHelper.insertSqlite('FileScanCsv', {
         'LOCATION': _locationController.text.trim(),
@@ -210,30 +233,40 @@ class _ScanScreenState extends State<ScanScreen> {
                     "Barcode : ",
                     color: COLOR_WHITE,
                   ),
-                  onEditingComplete: () {
+                  onFieldSubmitted: (value) {
                     if (_barcodeController.text.isNotEmpty &&
                         _locationController.text.isNotEmpty &&
                         _userController.text.isNotEmpty) {
                       _checkDataWithLocation();
                     } else {
-                      _errorDialog(
-                          isHideCancle: false,
-                          text: _userController.text.isEmpty
-                              ? Label("Please Input User")
+                      Alert(
+                          context: context,
+                          type: AlertType.warning,
+                          closeIcon: Label(""),
+                          desc: _userController.text.isEmpty
+                              ? "Please Input User"
                               : _locationController.text.isEmpty
-                                  ? Label("Please Select Location")
+                                  ? "Please Select Location"
                                   : _barcodeController.text.isEmpty
-                                      ? Label("Please Scan Barcode")
+                                      ? "Please Scan Barcode"
                                       : null,
-                          onpressOk: () {
-                            if (_userController.text.isEmpty) {
-                              _f1.requestFocus();
-                            } else if (_locationController.text.isEmpty) {
-                              _f2.requestFocus();
-                            } else
-                              (_f3.requestFocus());
-                            Navigator.pop(context);
-                          });
+                          style: AlertStyle(
+                              descPadding: EdgeInsets.only(top: 5),
+                              descStyle: TextStyle(fontSize: 16)),
+                          buttons: [
+                            DialogButton(
+                                color: COLOR_ACTIVE,
+                                child: Label("OK", color: COLOR_WHITE),
+                                onPressed: () async {
+                                  if (_userController.text.isEmpty) {
+                                    _f1.requestFocus();
+                                  } else if (_locationController.text.isEmpty) {
+                                    _f2.requestFocus();
+                                  } else
+                                    (_f3.requestFocus());
+                                  Navigator.pop(context);
+                                })
+                          ]).show();
                     }
                   },
                   fillColor: COLOR_WHITE,
@@ -361,63 +394,6 @@ class _ScanScreenState extends State<ScanScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
         ),
-      ),
-    );
-  }
-
-  void _errorDialog(
-      {Label? text,
-      Function? onpressOk,
-      Function? onpressCancel,
-      bool isHideCancle = true}) async {
-    // EasyLoading.showError("Error[03]", duration: Duration(seconds: 5));//if password
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        // title: const Text('AlertDialog Title'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Center(
-              child: text,
-            ),
-          ],
-        ),
-
-        actions: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Visibility(
-                visible: isHideCancle,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(COLOR_ACTIVE)),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Label(
-                    'Cancel',
-                    color: COLOR_WHITE,
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: isHideCancle,
-                child: SizedBox(
-                  width: 15,
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(COLOR_ACTIVE)),
-                  onPressed: () => onpressOk?.call(),
-                  child: const Label('OK', color: COLOR_WHITE),
-                ),
-              ),
-            ],
-          )
-        ],
       ),
     );
   }

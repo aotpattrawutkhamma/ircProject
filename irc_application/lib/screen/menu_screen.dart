@@ -7,6 +7,7 @@ import 'package:irc_application/route/route_generator.dart';
 import 'package:irc_application/services/sqlite.dart';
 import 'package:irc_application/widgets/Custom_bg.dart';
 import 'package:irc_application/widgets/Label.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -23,12 +24,6 @@ class _MenuScreenState extends State<MenuScreen> {
     // TODO: implement initState
     super.initState();
     _createDatabase();
-    _test();
-  }
-
-  void _test() async {
-    var downloadsPath = await AndroidPathProvider.downloadsPath;
-    print(downloadsPath);
   }
 
   void _createDatabase() async {
