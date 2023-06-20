@@ -162,7 +162,7 @@ class _ImportScreenState extends State<ImportScreen> {
                                       _saveData();
                                       Navigator.pop(context);
                                       EasyLoading.showSuccess("Save Success",
-                                          duration: Duration(seconds: 3));
+                                          duration: Duration(seconds: 1));
                                     })
                               ]).show();
                         } else {
@@ -238,7 +238,7 @@ class _ImportScreenState extends State<ImportScreen> {
                                       await _deleted();
                                       Navigator.pop(context);
                                       EasyLoading.showSuccess("Delete Success",
-                                          duration: Duration(seconds: 3));
+                                          duration: Duration(seconds: 1));
                                     })
                               ]).show();
                         } else {

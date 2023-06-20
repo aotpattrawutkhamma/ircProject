@@ -39,6 +39,7 @@ class _ScanScreenState extends State<ScanScreen> {
   final FocusNode _f2 = FocusNode();
   final FocusNode _f3 = FocusNode();
   final FocusNode _enter = FocusNode();
+  var _DATE;
 
   Future _getData() async {
     var sql = await databaseHelper.queryData('FileCsv');
@@ -50,6 +51,12 @@ class _ScanScreenState extends State<ScanScreen> {
     } else {
       print("Nodata");
     }
+  }
+
+  Future _getDate() async {
+    setState(() {
+      _DATE = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
+    });
   }
 
   Future _getDataFileScaned() async {
@@ -68,6 +75,7 @@ class _ScanScreenState extends State<ScanScreen> {
     _f1.requestFocus();
     _getData();
     _getDataFileScaned();
+    _getDate();
   }
 
   Future _checkDataWithLocation() async {
@@ -175,9 +183,10 @@ class _ScanScreenState extends State<ScanScreen> {
         'TIME': DateFormat('HH:mm:ss').format(DateTime.now()),
         'DATE': DateFormat('yyyy-MM-dd ').format(DateTime.now()),
       });
-      EasyLoading.showSuccess("Save Complete", duration: Duration(seconds: 3));
+      EasyLoading.showSuccess("Save Complete", duration: Duration(seconds: 1));
       _barcodeController.clear();
       _getDataFileScaned();
+      _getDate();
     }
   }
 

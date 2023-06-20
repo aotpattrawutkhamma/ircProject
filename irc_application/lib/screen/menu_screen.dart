@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,16 +20,37 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   DatabaseHelper databaseHelper = DatabaseHelper();
+  var _date;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _createDatabase();
+    _getDate();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _getDate();
   }
 
   void _createDatabase() async {
     await databaseHelper.initializeDatabase();
+  }
+
+  Future _getDate() async {
+    Timer.periodic(Duration(seconds: 20), (_) {
+      if (_date != DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())) {
+        setState(() {
+          _date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
+        });
+        // print("SSSSSSSS");
+      }
+      // print("AAAAAAA");
+    });
   }
 
   @override
@@ -134,7 +157,7 @@ class _MenuScreenState extends State<MenuScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 30),
               child: Label(
-                "Date - Time : ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}",
+                "Date - Time : ${_date}",
                 color: COLOR_WHITE,
               ),
             ),

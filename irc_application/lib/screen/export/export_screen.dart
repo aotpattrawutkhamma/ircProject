@@ -103,7 +103,7 @@ class _ExportScreenState extends State<ExportScreen> {
               context: context,
               type: AlertType.success,
               closeIcon: Label(""),
-              desc: "Save Complete" + '\n' + "File Name : " + '$filename',
+              desc: "Export Complete" + '\n' + "File Name : " + '$filename',
               style: AlertStyle(
                   descPadding: EdgeInsets.only(top: 5),
                   descStyle: TextStyle(fontSize: 16)),
