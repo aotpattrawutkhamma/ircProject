@@ -13,17 +13,19 @@ class CustomInputField extends StatelessWidget {
       this.height,
       this.maxLines,
       this.colorText = COLOR_DARK_BLUE,
-      this.onChanged});
+      this.onChanged,
+      this.onFieldSubmitted});
   final Widget? labeltext;
   final bool? enabled;
   final TextEditingController? controller;
   final Color fillColor;
-  final Function? onEditingComplete;
+  final Function()? onEditingComplete;
   final FocusNode? focusNode;
   final double? height;
   final int? maxLines;
   final Color colorText;
   final Function(String)? onChanged;
+  final Function(String)? onFieldSubmitted;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,10 +38,12 @@ class CustomInputField extends StatelessWidget {
               child: Container(
                 height: height ?? 40,
                 child: TextFormField(
+                  onFieldSubmitted: onFieldSubmitted,
+                  textInputAction: TextInputAction.go,
                   onChanged: onChanged,
                   maxLines: 1,
                   focusNode: focusNode,
-                  onEditingComplete: () => onEditingComplete?.call(),
+                  onEditingComplete: onEditingComplete,
                   controller: controller,
                   enabled: enabled,
                   textAlignVertical: TextAlignVertical.center,

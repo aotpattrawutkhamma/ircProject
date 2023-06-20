@@ -16,6 +16,7 @@ import 'package:irc_application/widgets/Custom_button.dart';
 import 'package:irc_application/widgets/Label.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ExportScreen extends StatefulWidget {
   const ExportScreen({Key? key}) : super(key: key);
@@ -55,72 +56,115 @@ class _ExportScreenState extends State<ExportScreen> {
   }
 
   Future<void> _ExportCSV() async {
-    if (await Permission.storage.request().isGranted) {
-      if (result.isNotEmpty) {
-        var data = 'DATE';
-        data += ',TIME';
-        data += ',USER';
-        data += ',B1';
-        data += ',B2';
-        data += ',B3';
-        data += ',B4';
-        data += ',LOCATION';
-        data += '\r';
-
-        var listData = result.length;
+    try {
+      if (await Permission.storage.request().isGranted) {
         if (result.isNotEmpty) {
-          result.forEach((element) {
-            data += '${element.DATE.toString()}';
-            data += ',${element.TIME.toString()}';
-            data += ',${element.USER.toString()}';
-            data += ',${element.B1.toString()}';
-            data += ',${element.B2.toString()}';
-            data += ',${element.B3.toString()}';
-            data += ',${element.B4.toString()}';
-            data += ',${element.LOCATION.toString()}';
-            data += '\r';
-          });
-        }
+          var data = 'DATE';
+          data += ',TIME';
+          data += ',USER';
+          data += ',B1';
+          data += ',B2';
+          data += ',B3';
+          data += ',B4';
+          data += ',LOCATION';
+          data += '\r';
 
-        var directory = await AndroidPathProvider.downloadsPath;
-
-        var selectDirectory = '$directory';
-        var directoryExists = await Directory(selectDirectory).exists();
-        if (!directoryExists) {
-          await Directory(selectDirectory).create(recursive: true);
-        }
-
-        ///storage/emulated/0/Download
-        var filename = await getFilename('CSV');
-        var pathFile = '$selectDirectory/$filename';
-
-        var file = File(pathFile);
-        await file.writeAsString(data);
-        _deleted();
-        _Dialog(
-            text: Label("Save Complete" + '\n' + "File Name : " + '$filename'),
-            isHideCancle: false,
-            onpressOk: () async {
-              await _deleted();
-              Navigator.pop(context);
+          var listData = result.length;
+          if (result.isNotEmpty) {
+            result.forEach((element) {
+              data += '${element.DATE.toString()}';
+              data += ',${element.TIME.toString()}';
+              data += ',${element.USER.toString()}';
+              data += ',${element.B1.toString()}';
+              data += ',${element.B2.toString()}';
+              data += ',${element.B3.toString()}';
+              data += ',${element.B4.toString()}';
+              data += ',${element.LOCATION.toString()}';
+              data += '\r';
             });
-      } else {
-        _Dialog(
-            text: Label("Data not Found"),
-            isHideCancle: false,
-            onpressOk: () async {
-              await _deleted();
-              Navigator.pop(context);
-            });
+          }
+
+          var directory = await AndroidPathProvider.downloadsPath;
+
+          var selectDirectory = '$directory';
+          var directoryExists = await Directory(selectDirectory).exists();
+          if (!directoryExists) {
+            await Directory(selectDirectory).create(recursive: true);
+          }
+
+          ///storage/emulated/0/Download
+          var filename = await getFilename('CSV');
+          var pathFile = '$selectDirectory/$filename';
+
+          var file = File(pathFile);
+          await file.writeAsString(data);
+          _deleted();
+          Alert(
+              context: context,
+              type: AlertType.success,
+              closeIcon: Label(""),
+              desc: "Save Complete" + '\n' + "File Name : " + '$filename',
+              style: AlertStyle(
+                  descPadding: EdgeInsets.only(top: 5),
+                  descStyle: TextStyle(fontSize: 16)),
+              buttons: [
+                // DialogButton(
+                //     color: COLOR_DANGER,
+                //     child: Label(
+                //       "Cancel",
+                //       color: COLOR_WHITE,
+                //     ),
+                //     onPressed: () async {
+                //       Navigator.pop(context);
+                //     }),
+                DialogButton(
+                    color: COLOR_ACTIVE,
+                    child: Label("OK", color: COLOR_WHITE),
+                    onPressed: () async {
+                      await _deleted();
+                      Navigator.pop(context);
+                    })
+              ]).show();
+        } else {
+          Alert(
+              context: context,
+              type: AlertType.error,
+              closeIcon: Label(""),
+              desc: "Data not Found",
+              style: AlertStyle(
+                  descPadding: EdgeInsets.only(top: 5),
+                  descStyle: TextStyle(fontSize: 16)),
+              buttons: [
+                // DialogButton(
+                //     color: COLOR_DANGER,
+                //     child: Label(
+                //       "Cancel",
+                //       color: COLOR_WHITE,
+                //     ),
+                //     onPressed: () async {
+                //       Navigator.pop(context);
+                //     }),
+                DialogButton(
+                    color: COLOR_ACTIVE,
+                    child: Label("OK", color: COLOR_WHITE),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    })
+              ]).show();
+        }
       }
-    } else {
+      if (await Permission.storage.status.isDenied) {
+        await Permission.storage.request();
+      }
+    } catch (e, s) {
       _Dialog(
           text: Label(
-            "Exception",
+            "${e},${s}",
             maxLines: 100,
           ),
           isHideCancle: false,
           onpressOk: () async {
+            await _deleted();
             Navigator.pop(context);
           });
     }
