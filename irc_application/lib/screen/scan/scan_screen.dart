@@ -140,7 +140,7 @@ class _ScanScreenState extends State<ScanScreen> {
 
             Navigator.pop(context);
           });
-    } else {
+    } else if (isFound == false) {
       await databaseHelper.insertSqlite('FileScanCsv', {
         'LOCATION': _locationController.text.trim(),
         'USER': _userController.text.trim(),
@@ -223,7 +223,7 @@ class _ScanScreenState extends State<ScanScreen> {
                               : _locationController.text.isEmpty
                                   ? Label("Please Select Location")
                                   : _barcodeController.text.isEmpty
-                                      ? Label("Please Input User")
+                                      ? Label("Please Scan Barcode")
                                       : null,
                           onpressOk: () {
                             if (_userController.text.isEmpty) {

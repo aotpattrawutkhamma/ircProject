@@ -1,3 +1,4 @@
+import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +23,12 @@ class _MenuScreenState extends State<MenuScreen> {
     // TODO: implement initState
     super.initState();
     _createDatabase();
+    _test();
+  }
+
+  void _test() async {
+    var downloadsPath = await AndroidPathProvider.downloadsPath;
+    print(downloadsPath);
   }
 
   void _createDatabase() async {
