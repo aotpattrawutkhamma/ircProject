@@ -39,6 +39,7 @@ class _ScanScreenState extends State<ScanScreen> {
   final FocusNode _f2 = FocusNode();
   final FocusNode _f3 = FocusNode();
   final FocusNode _enter = FocusNode();
+  var _date;
 
   Future _getData() async {
     var sql = await databaseHelper.queryData('FileCsv');
@@ -61,6 +62,12 @@ class _ScanScreenState extends State<ScanScreen> {
     }
   }
 
+  Future _getDate() async {
+    setState(() {
+      _date = DateFormat("dd/MM/yyyy HH:mm").format(DateTime.now());
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -68,6 +75,7 @@ class _ScanScreenState extends State<ScanScreen> {
     _f1.requestFocus();
     _getData();
     _getDataFileScaned();
+    _getDate();
   }
 
   Future _checkDataWithLocation() async {
@@ -178,6 +186,7 @@ class _ScanScreenState extends State<ScanScreen> {
       EasyLoading.showSuccess("Save Complete", duration: Duration(seconds: 3));
       _barcodeController.clear();
       _getDataFileScaned();
+      _getDate();
     }
   }
 
@@ -331,7 +340,7 @@ class _ScanScreenState extends State<ScanScreen> {
                   color: COLOR_WHITE,
                 ),
                 Label(
-                  "Date - Time ${DateFormat("dd/MM/yyyy HH:mm").format(DateTime.now())}",
+                  "Date - Time ${_date}",
                   color: COLOR_WHITE,
                 )
               ],

@@ -28,7 +28,6 @@ class _ExportScreenState extends State<ExportScreen> {
   List<CsvScanModel> _tempCsv = [];
   List<FileCsvScanModel> result = [];
   DatabaseHelper databaseHelper = DatabaseHelper();
-  // final File file = File("/storage/emulated/0/Download/result.csv");
   final File file = File("/storage/101D-3E1F/Download/result2.csv");
 
   @override
@@ -64,8 +63,6 @@ class _ExportScreenState extends State<ExportScreen> {
         data += ',B4';
         data += ',LOCATION';
         data += '\r';
-
-        var listData = result.length;
         if (result.isNotEmpty) {
           result.forEach((element) {
             data += '${element.DATE.toString()}';
@@ -124,19 +121,6 @@ class _ExportScreenState extends State<ExportScreen> {
     }
   }
 
-  // Future send(String TIME, String DATE, String USER, String B1, String B2,
-  //     String B3, String B4, String LOCATION) async {
-  //   try {
-  //     await file.writeAsString(
-  //         TIME += DATE += USER += B1 += B2 += B3 += B4 += LOCATION + '\n',
-  //         mode: FileMode.write,
-  //         flush: true);
-  //   } catch (e) {
-  //     print("Error: $e");
-  //   }
-  //   return await file.length();
-  // }
-
   Future _getData() async {
     List<Map<String, dynamic>> sqlData =
         await databaseHelper.queryData('FileScanCsv');
@@ -150,17 +134,6 @@ class _ExportScreenState extends State<ExportScreen> {
   }
   //BT-571-A+230328R002+448+20230428
   //TD-641-A+230327R002+832+20230411
-  // Future _getData() async {
-  //   List<Map<String, dynamic>> sqlData =
-  //       await databaseHelper.queryData('FileScanCsv');
-  //   if (sqlData.isNotEmpty) {
-  //     setState(() {
-  //       result = sqlData.map((e) => FileCsvScanModel.fromMap(e)).toList();
-  //     });
-  //   } else {
-  //     print("Nodata");
-  //   }
-  // }
 
   Future<String> getFilename(String extension) async {
     return '${DateTime.now().toIso8601String().replaceAll('T', '').replaceAll('-', '').replaceAll(':', '').split('.')[0]}.$extension';
